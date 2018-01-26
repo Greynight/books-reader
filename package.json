@@ -1,0 +1,27 @@
+{
+  "name": "book-reader",
+  "version": "0.1.0",
+  "description": "Web application to read books in another languages",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./backend/index.js"
+  },
+  "private": true,
+  "author": "Ivan Sydorenko",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "helmet": "^3.10.0",
+    "mongodb": "^3.0.1",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0"
+  }
+}
