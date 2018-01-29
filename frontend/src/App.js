@@ -4,6 +4,9 @@ class App extends Component {
   getBooks = () => {
     fetch('/books', {credentials: 'include'})
       .then(res => res.json())
+      .catch (err => {
+        console.log(err);
+      })
       .then(res => {
         console.log(res);
       });
