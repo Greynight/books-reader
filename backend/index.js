@@ -37,11 +37,7 @@ const createHash = function(password){
   return bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
 };
 
-passport.use(/*'local', */new LocalStrategy(/*{
-    usernameField : 'email',
-    passwordField : 'password'
-  }, */async function(email, password, done) {
-    console.log('mongoClient.connect');
+passport.use('local-auth', new LocalStrategy(async function(email, password, done) {
     try {
       let client = await mongoClient.connect('mongodb://localhost:27017');
 
@@ -78,47 +74,52 @@ passport.deserializeUser(async function(id, done) {
   try {
     let client = await mongoClient.connect('mongodb://localhost:27017');
     const db = client.db('books');
-    console.log('id', id);
     const users = await db.collection('users').find({email: id}).limit(1).toArray();
-    console.log('deserializeUser', users[0]);
     done(null, users[0]);
   } catch (err) {
     console.log(err.stack);
-
     done(err);
   }
 });
 
 
 app.post('/login',
-  passport.authenticate('local', {
+  passport.authenticate('local-auth', {
     successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: false
   })
 );
 
-app.post('/register', (req, res) => {});
+app.post('/register', async function(req, res) {
+  try {
+    let client = await mongoClient.connect('mongodb://localhost:27017');
+    const db = client.db('books');
+    const email = req.params.email;
 
-// function authenticationMiddleware () {
-//   return function (req, res, next) {
-//     if (req.isAuthenticated()) {
-//       return next()
-//     }
-//     //res.redirect('/')
-//     res.json({user: 'unauthenticated'});
-//   }
-// }
-//
+    const users = await db.collection('users').find({email}).limit(1).toArray();
+
+    if (users.length) {
+      // this email is already used
+    } else {
+
+    }
+
+
+    done(null, users[0]);
+  } catch (err) {
+    console.log(err.stack);
+    done(err);
+  }
+});
 
 function isLoggedIn(req, res, next) {
-  console.log('isLoggedIn', this.user);
-  // if user is authenticated in the session, carry on
-  if (req.isAuthenticated())
+  if (req.isAuthenticated()) {
     return next();
+  }
 
-  // if they aren't redirect them to the home page
-  res.redirect('/');
+  res.status(401).send('Please log in');
+  //res.redirect('/login');
 }
 
 
@@ -141,14 +142,18 @@ app.get('/books', isLoggedIn, (req, res) => {
 
 
 
-
+app.get('/login', (req, res) => {
+  res.json({
+    result: 'show login page'
+  });
+});
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
