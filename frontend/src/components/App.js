@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
+import Axios from 'axios';
 
 class App extends Component {
   getBooks = () => {
-    fetch('/books', {credentials: 'include'})
-      .then(res => res.json())
-      .catch (err => {
-        console.log(err);
-      })
+    Axios('/books', {withCredentials: true})
       .then(res => {
         console.log(res);
+      })
+      .catch (err => {
+        console.log(err);
       });
   };
 
@@ -29,6 +29,19 @@ class App extends Component {
           </div>
           <div>
             <input type="submit" value="Log In"/>
+          </div>
+        </form>
+        <form action="/register" method="post">
+          <div>
+            <label>email:</label>
+            <input type="text" name="username"/>
+          </div>
+          <div>
+            <label>Password:</label>
+            <input type="password" name="password"/>
+          </div>
+          <div>
+            <input type="submit" value="Sign up"/>
           </div>
         </form>
       </div>

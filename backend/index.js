@@ -29,7 +29,7 @@ app.use((err, request, response, next) => {
 
 const LocalStrategy = require('passport-local').Strategy;
 
-const isValidPassword = function(user, password){
+const isValidPassword = function(user, password) {
   return bcrypt.compareSync(password, user.password);
 };
 
@@ -50,7 +50,7 @@ passport.use('local-auth', new LocalStrategy(async function(email, password, don
       //if (err) { return done(err); }
       if (!users[0]) { return done(null, false); }
 
-      if (users[0].password !== password) {
+      if (!isValidPassword(users[0], password)) {
         return done(null, false);
       }
 
@@ -58,6 +58,38 @@ passport.use('local-auth', new LocalStrategy(async function(email, password, don
 
     } catch (err) {
       console.log(err.stack);
+
+      return done(err);
+    }
+  }
+));
+
+passport.use('registration', new LocalStrategy(async function(email, password, done) {
+    console.log('registration');
+    try {
+      let client = await mongoClient.connect('mongodb://localhost:27017');
+
+      const db = client.db('books');
+      const users = await db.collection('users').find({email: email}).limit(1).toArray();
+
+      if (users.length) {
+        console.log('User already exists');
+        return done(null, false);
+      }
+
+      // TODO check errors
+      let result = await db.collection('users').insertOne({
+        email,
+        password: createHash(password)
+      });
+
+      let newUser = result.ops[0];
+
+      console.log(newUser);
+
+      return done(null, newUser);
+    } catch (err) {
+      console.log('registration error', err.stack);
 
       return done(err);
     }
@@ -87,31 +119,16 @@ app.post('/login',
   passport.authenticate('local-auth', {
     successRedirect: '/',
     failureRedirect: '/login',
-    failureFlash: false
+    //failureFlash: false
   })
 );
 
-app.post('/register', async function(req, res) {
-  try {
-    let client = await mongoClient.connect('mongodb://localhost:27017');
-    const db = client.db('books');
-    const email = req.params.email;
-
-    const users = await db.collection('users').find({email}).limit(1).toArray();
-
-    if (users.length) {
-      // this email is already used
-    } else {
-
-    }
-
-
-    done(null, users[0]);
-  } catch (err) {
-    console.log(err.stack);
-    done(err);
-  }
-});
+app.post('/register',
+  passport.authenticate('registration', {
+    successRedirect: '/',
+    //failureRedirect: '/login',
+    //failureFlash: false
+}));
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
@@ -119,7 +136,6 @@ function isLoggedIn(req, res, next) {
   }
 
   res.status(401).send('Please log in');
-  //res.redirect('/login');
 }
 
 
