@@ -65,6 +65,7 @@ const localRegistrationStrategy = async (email, password, done) => {
 
     if (users.length) {
       // TODO logging
+      // TODO show message to user
       console.log('User already exists');
       return done(null, false);
     }

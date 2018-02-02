@@ -1,23 +1,37 @@
-import React, { Component } from 'react';
-import Axios from 'axios';
+import React from 'react';
 
-class App extends Component {
-  getBooks = () => {
-    Axios('/books', {withCredentials: true})
-      .then(res => {
-        console.log(res);
-      })
-      .catch (err => {
-        console.log(err);
-      });
-  };
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom';
 
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-        </header>
-        <span onClick={this.getBooks}>Get books list</span>
+import TopBarContainer from './TopBarContainer';
+import SignUpDialogContainer from './SignUpDialogContainer';
+import SignInDialogContainer from './SignInDialogContainer';
+import Loader from './Loader';
+
+import PropTypes from 'prop-types';
+import {withStyles} from "material-ui/styles/index";
+
+const styles = {
+  root: {
+    width: '100%'
+  }
+};
+
+
+const App = (props) => {
+  const { classes } = props;
+
+  return (
+    <Router>
+      <div className={classes.root}>
+        {props.isLoading ? <Loader/> : ''}
+        <TopBarContainer />
+        <SignUpDialogContainer />
+        <SignInDialogContainer />
+
         <form action="/login" method="post">
           <div>
             <label>Username:</label>
@@ -44,9 +58,15 @@ class App extends Component {
             <input type="submit" value="Sign up"/>
           </div>
         </form>
-      </div>
-    );
-  }
-}
 
-export default App;
+      </div>
+    </Router>
+  );
+};
+
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+};
+
+export default withStyles(styles)(App);

@@ -27,26 +27,39 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const LocalStrategy = require('passport-local').Strategy;
+const passwordConfig = {
+  usernameField: 'email',
+  passwordField: 'password'
+};
 
-passport.use('local-auth', new LocalStrategy(localAuthStrategy));
-passport.use('registration', new LocalStrategy(localRegistrationStrategy));
+passport.use('local-auth', new LocalStrategy(passwordConfig, localAuthStrategy));
+passport.use('registration', new LocalStrategy(passwordConfig, localRegistrationStrategy));
 passport.serializeUser(serializeUser);
 passport.deserializeUser(deserializeUser);
 
 app.post('/login',
-  passport.authenticate('local-auth', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    //failureFlash: false
-  })
+  passport.authenticate('local-auth', {}),
+  (req, res) => {
+    res.json({text: 'Nice to see you'});
+  }
 );
 
 app.post('/register',
-  passport.authenticate('registration', {
-    successRedirect: '/',
-    //failureRedirect: '/login',
-    //failureFlash: false
-}));
+  passport.authenticate('registration', {}),
+  (req, res) => {
+    //console.log(arguments);
+    // TODO TODO TODO
+    res.json({text: 'Nice to meet you'});
+  }
+);
+
+// check if user is logged in
+app.get('/user', isLoggedIn, (req, res) => {
+  // TODO maybe send username
+  res.json({
+    result: 'user is logged'
+  });
+});
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {

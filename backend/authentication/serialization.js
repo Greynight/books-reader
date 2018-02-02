@@ -6,6 +6,7 @@ const mongoClient = require('mongodb').MongoClient;
  * @param done
  */
 const serializeUser = (user, done) => {
+  // TODO mb id?
   done(null, user.email);
 };
 
