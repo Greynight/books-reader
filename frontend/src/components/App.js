@@ -9,7 +9,22 @@ import {
 import TopBarContainer from './TopBarContainer';
 import SignUpDialogContainer from './SignUpDialogContainer';
 import SignInDialogContainer from './SignInDialogContainer';
+import UploadBookDialog from './UploadBookDialogContainer';
 import Loader from './Loader';
+
+import BooksContainer from './BooksContainer';
+
+
+import Button from 'material-ui/Button';
+import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
+import Visibility from 'material-ui-icons/Visibility';
+import FileUpload from 'material-ui-icons/FileUpload';
+import VisibilityOff from 'material-ui-icons/VisibilityOff';
+import { FormControl } from 'material-ui/Form';
+import IconButton from 'material-ui/IconButton';
+
+
+
 
 import PropTypes from 'prop-types';
 import {withStyles} from "material-ui/styles/index";
@@ -20,6 +35,9 @@ const styles = {
   }
 };
 
+const Main = (props) => {
+  return <span>Main text from the DB</span>
+};
 
 const App = (props) => {
   const { classes } = props;
@@ -31,34 +49,10 @@ const App = (props) => {
         <TopBarContainer />
         <SignUpDialogContainer />
         <SignInDialogContainer />
+        <UploadBookDialog />
 
-        <form action="/login" method="post">
-          <div>
-            <label>Username:</label>
-            <input type="text" name="username"/>
-          </div>
-          <div>
-            <label>Password:</label>
-            <input type="password" name="password"/>
-          </div>
-          <div>
-            <input type="submit" value="Log In"/>
-          </div>
-        </form>
-        <form action="/register" method="post">
-          <div>
-            <label>email:</label>
-            <input type="text" name="username"/>
-          </div>
-          <div>
-            <label>Password:</label>
-            <input type="password" name="password"/>
-          </div>
-          <div>
-            <input type="submit" value="Sign up"/>
-          </div>
-        </form>
-
+        <Route path="/" exact component={Main} />
+        <Route path="/books" component={BooksContainer}/>
       </div>
     </Router>
   );

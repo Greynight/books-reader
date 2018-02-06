@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
@@ -7,8 +9,6 @@ import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import AccountCircle from 'material-ui-icons/AccountCircle';
-import Switch from 'material-ui/Switch';
-import { FormControlLabel, FormGroup } from 'material-ui/Form';
 import Menu, { MenuItem } from 'material-ui/Menu';
 
 import PropTypes from 'prop-types';
@@ -30,15 +30,15 @@ class TopBar extends React.Component {
     anchorEl: null,
   };
 
-  handleChange = (event, checked) => {
-    this.setState({ auth: checked });
-  };
-
   handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
   handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
+  handleBooksClick = () => {
     this.setState({ anchorEl: null });
   };
 
@@ -83,6 +83,9 @@ class TopBar extends React.Component {
               >
                 <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                 <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                <MenuItem onClick={this.handleBooksClick}>
+                  <Link to="/books">Books</Link>
+                </MenuItem>
               </Menu>
             </div>
           ):(

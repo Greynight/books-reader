@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import {
   hideSignUpDialogAction,
   signUpAction,
-  showLoaderAction,
-  hideLoaderAction
+  showLoaderAction
 } from './../redux/actions';
 
 const mapStateToProps = (state) => ({
@@ -17,7 +16,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(showLoaderAction());
     dispatch(signUpAction(data));
     dispatch(hideSignUpDialogAction());
-    dispatch(hideLoaderAction());
   },
   handleSignUpDialogClose: () => {
     dispatch(hideSignUpDialogAction());

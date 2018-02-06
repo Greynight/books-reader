@@ -21,7 +21,7 @@ const Loader = (props) => {
   return (
     <div className={classes.backdrop} align="center" justify="center">
       <CircularProgress
-        mode="indeterminate"
+        variant="indeterminate"
         size={80}
         thickness={5}
       />

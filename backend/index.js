@@ -8,8 +8,13 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
 
+const multer  = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({storage});
+
 const { localAuthStrategy, localRegistrationStrategy } = require('./authentication/strategies');
 const { deserializeUser, serializeUser } = require('./authentication/serialization');
+const Books = require('./books');
 
 const app = express();
 
@@ -71,12 +76,20 @@ function isLoggedIn(req, res, next) {
 
 
 app.get('/books', isLoggedIn, (req, res) => {
-  //console.log(passport);
   res.json({
     result: 'booksList'
   });
-
 });
+
+app.delete('/delete', isLoggedIn, (req, res) => {
+  // TODO delete book from the db
+  // TODO what should be done with all statistics?
+  res.json({
+    result: 'booksList'
+  });
+});
+
+app.post('/upload', isLoggedIn, upload.any(), Books.insertBook);
 
 // TODO tmp
 

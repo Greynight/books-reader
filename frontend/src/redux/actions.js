@@ -7,10 +7,16 @@ import {
   HIDE_SIGN_IN_DIALOG,
   HIDE_SIGN_UP_DIALOG,
   SHOW_LOADER,
-  HIDE_LOADER
+  HIDE_LOADER,
+  LOAD_BOOKS,
+  UPLOAD_BOOK,
+  DELETE_BOOK,
+  SHOW_UPLOAD_DIALOG,
+  HIDE_UPLOAD_DIALOG
 } from './types';
 
 import User from './../data-sources/user';
+import Book from './../data-sources/book';
 
 export const signInAction = (data) => ({
   type: SIGN_IN,
@@ -49,4 +55,27 @@ export const showLoaderAction = () => ({
 
 export const hideLoaderAction = () => ({
   type: HIDE_LOADER
+});
+
+export const loadBooksAction = () => ({
+  type: LOAD_BOOKS,
+  payload: Book.getList()
+});
+
+export const uploadBookAction = (data) => ({
+  type: UPLOAD_BOOK,
+  payload: Book.upload(data)
+});
+
+export const deleteBookAction = (params) => ({
+  type: DELETE_BOOK,
+  payload: Book.delete(params)
+});
+
+export const showUploadDialogAction = () => ({
+  type: SHOW_UPLOAD_DIALOG
+});
+
+export const hideUploadDialogAction = () => ({
+  type: HIDE_UPLOAD_DIALOG
 });

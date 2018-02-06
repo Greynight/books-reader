@@ -102,7 +102,7 @@ class SignInDialog extends React.Component {
           <Button onClick={this.props.handleSignInDialogClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.handleLoginButtonClick} raised color="primary">
+          <Button onClick={this.handleLoginButtonClick} variant="raised" color="primary">
             Sign In
           </Button>
         </DialogActions>

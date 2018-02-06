@@ -7,7 +7,6 @@ const config = {
 // TODO move this to separate class and extend it
 axios.interceptors.response.use((response) => {
   // TODO
-  console.log(response);
   return response;
 }, (error) => {
   const status = error.response.status;
@@ -33,9 +32,8 @@ class User {
 
   static async getCurrentUser() {
     const res = await axios.get(process.env.REACT_APP_GET_CURRENT_USER, config);
-    console.log(res);
     return !!res.isUnAuthenticated;
   }
 }
 
-export default User
+export default User;

@@ -102,7 +102,7 @@ class SignUpDialog extends React.Component {
           <Button onClick={this.props.handleSignUpDialogClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.handleSaveButtonClick} raised color="primary">
+          <Button onClick={this.handleSaveButtonClick} variant="raised" color="primary">
             Sign Up
           </Button>
         </DialogActions>

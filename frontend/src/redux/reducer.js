@@ -7,14 +7,22 @@ import {
   HIDE_SIGN_IN_DIALOG,
   HIDE_SIGN_UP_DIALOG,
   SHOW_LOADER,
-  HIDE_LOADER
+  HIDE_LOADER,
+  LOAD_BOOKS,
+  UPLOAD_BOOK,
+  DELETE_BOOK,
+  SHOW_UPLOAD_DIALOG,
+  HIDE_UPLOAD_DIALOG
 } from './types';
 
 const initState = {
   user: false,
   isSignInDialogShown: false,
   isSignUpDialogShown: false,
-  isLoading: false
+  isUploadDialogShown: false,
+  isLoading: false,
+  books: [],
+  activeBook: {}
 };
 
 export default (state = initState, action) => {
@@ -46,6 +54,25 @@ export default (state = initState, action) => {
 
     case HIDE_LOADER:
       return {...state, isLoading: false};
+
+    case LOAD_BOOKS:
+      action.payload = action.payload || [];// TODO tmp
+      return {...state, books: action.payload, isLoading: false};
+
+    case UPLOAD_BOOK:
+      let books = [...state.books];
+      books.push(action.payload.book);
+
+      return {...state, books, isLoading: false};
+
+    case DELETE_BOOK:
+      return {...state, books: action.payload, isLoading: false};
+
+    case SHOW_UPLOAD_DIALOG:
+      return {...state, isUploadDialogShown: true};
+
+    case HIDE_UPLOAD_DIALOG:
+      return {...state, isUploadDialogShown: false};
 
     default:
       return state;

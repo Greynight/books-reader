@@ -1,4 +1,5 @@
 const mongoClient = require('mongodb').MongoClient;
+const ObjectID  = require('mongodb').ObjectID ;
 
 /**
  * Serialize user to store in session
@@ -6,8 +7,7 @@ const mongoClient = require('mongodb').MongoClient;
  * @param done
  */
 const serializeUser = (user, done) => {
-  // TODO mb id?
-  done(null, user.email);
+  done(null, user._id);
 };
 
 /**
@@ -20,8 +20,9 @@ const deserializeUser = async (id, done) => {
   try {
     const client = await mongoClient.connect(process.env.DB_URL);
     const db = client.db('books');
-    const users = await db.collection('users').find({email: id}).limit(1).toArray();
-    done(null, users[0]);
+    const user = await db.collection('users').findOne({_id: new ObjectID(id)});
+
+    done(null, user);
   } catch (err) {
     // TODO logging
     console.log(err.stack);
