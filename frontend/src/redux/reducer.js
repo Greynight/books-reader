@@ -12,7 +12,8 @@ import {
   UPLOAD_BOOK,
   DELETE_BOOK,
   SHOW_UPLOAD_DIALOG,
-  HIDE_UPLOAD_DIALOG
+  HIDE_UPLOAD_DIALOG,
+  OPEN_BOOK
 } from './types';
 
 const initState = {
@@ -22,7 +23,7 @@ const initState = {
   isUploadDialogShown: false,
   isLoading: false,
   books: [],
-  activeBook: {}
+  activeBook: null
 };
 
 export default (state = initState, action) => {
@@ -76,6 +77,9 @@ export default (state = initState, action) => {
 
     case HIDE_UPLOAD_DIALOG:
       return {...state, isUploadDialogShown: false};
+
+    case OPEN_BOOK:
+      return {...state, activeBook: action.payload};
 
     default:
       return state;

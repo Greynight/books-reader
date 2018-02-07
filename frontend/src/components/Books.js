@@ -5,6 +5,8 @@ import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Ta
 import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import Delete from 'material-ui-icons/Delete';
+import OpenInBrowser from 'material-ui-icons/OpenInBrowser';
+import Close from 'material-ui-icons/Close';
 
 const styles = theme => ({
   root: {
@@ -17,21 +19,33 @@ const styles = theme => ({
   },
   icon: {
     cursor: 'pointer'
+  },
+  activeRow: {
+    color: 'green'
+  },
+  rowCell: {
+    color: 'inherit'
   }
 });
 
 
 const Books = (props) => {
-console.log(props.books);
-  // if (props.user && !props.books.length) {
-  //   props.loadBooks();
-  // }
-
   const { classes } = props;
+
+  // TODO check, always must be an array
   const books = props.books || [];
 
-  const handleDeleteClick = (evt) => {
-    props.handleDeleteBook(evt.currentTarget.id);
+  const handleDeleteClick = (id) => {
+    if (props.activeBook === id) {
+      // TODO check if works
+      props.handleChangeActiveBook(null);
+    }
+
+    props.handleDeleteBook(id);
+  };
+
+  const handleOpenBook = (id) => {
+    props.handleChangeActiveBook(id);
   };
 
   return (
@@ -55,15 +69,27 @@ console.log(props.books);
           <TableBody>
             {books.map(book => {
               return (
-                <TableRow key={book._id}>
-                  <TableCell>{book.title}</TableCell>
-                  <TableCell>{book.author}</TableCell>
-                  <TableCell>{book.fileName}</TableCell>
-                  <TableCell>
+                <TableRow
+                  key={book._id}
+                  className={props.activeBook === book._id ? classes.activeRow : ''}
+                >
+                  <TableCell className={classes.rowCell}>{book.title}</TableCell>
+                  <TableCell className={classes.rowCell}>{book.author}</TableCell>
+                  <TableCell className={classes.rowCell}>{book.fileName}</TableCell>
+                  <TableCell id={book._id}>
+                    {props.activeBook === book._id ?
+                      <Close
+                        onClick={() => handleOpenBook(null)}
+                        className={classes.icon}
+                      /> :
+                      <OpenInBrowser
+                        onClick={() => handleOpenBook(book._id)}
+                        className={classes.icon}
+                      />
+                    }
                     <Delete
                       className={classes.icon}
-                      onClick={handleDeleteClick}
-                      id={book._id}
+                      onClick={() => handleDeleteClick(book._id)}
                     />
                   </TableCell>
                 </TableRow>

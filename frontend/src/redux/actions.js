@@ -12,7 +12,8 @@ import {
   UPLOAD_BOOK,
   DELETE_BOOK,
   SHOW_UPLOAD_DIALOG,
-  HIDE_UPLOAD_DIALOG
+  HIDE_UPLOAD_DIALOG,
+  OPEN_BOOK
 } from './types';
 
 import User from './../data-sources/user';
@@ -78,4 +79,9 @@ export const showUploadDialogAction = () => ({
 
 export const hideUploadDialogAction = () => ({
   type: HIDE_UPLOAD_DIALOG
+});
+
+export const openBookAction = (id) => ({
+  type: OPEN_BOOK,
+  payload: id
 });

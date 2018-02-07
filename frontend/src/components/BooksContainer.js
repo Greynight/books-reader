@@ -8,7 +8,8 @@ import {
   //uploadBookAction,
   deleteBookAction,
   showUploadDialogAction,
-  showLoaderAction
+  showLoaderAction,
+  openBookAction
   //hideUploadDialogAction
 } from './../redux/actions';
 import {getCurrentUserAction} from "../redux/actions";
@@ -33,12 +34,16 @@ const mapDispatchToProps = (dispatch) => ({
   handleDeleteBook: (id) => {
     dispatch(showLoaderAction());
     dispatch(deleteBookAction(id));
+  },
+  handleChangeActiveBook: (id) => {
+    dispatch(openBookAction(id));
   }
   // handleHideDialogClick: () => {
   //   dispatch(hideUploadDialogAction());
   // }
 });
 
+// TODO think about another way
 store.dispatch(showLoaderAction());
 store.dispatch(loadBooksAction());
 
