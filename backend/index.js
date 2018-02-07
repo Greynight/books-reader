@@ -75,19 +75,9 @@ function isLoggedIn(req, res, next) {
 }
 
 
-app.get('/books', isLoggedIn, (req, res) => {
-  res.json({
-    result: 'booksList'
-  });
-});
+app.get('/books', isLoggedIn, Books.getBooks);
 
-app.delete('/delete', isLoggedIn, (req, res) => {
-  // TODO delete book from the db
-  // TODO what should be done with all statistics?
-  res.json({
-    result: 'booksList'
-  });
-});
+app.delete('/books/:id', isLoggedIn, Books.deleteBook);
 
 app.post('/upload', isLoggedIn, upload.any(), Books.insertBook);
 
@@ -102,11 +92,11 @@ app.post('/upload', isLoggedIn, upload.any(), Books.insertBook);
 
 
 
-app.get('/login', (req, res) => {
-  res.json({
-    result: 'show login page'
-  });
-});
+// app.get('/login', (req, res) => {
+//   res.json({
+//     result: 'show login page'
+//   });
+// });
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));

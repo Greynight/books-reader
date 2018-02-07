@@ -56,6 +56,7 @@ class SignInDialog extends React.Component {
   };
 
   render() {
+    // TODO confirm on enter
     const { classes } = this.props;
 
     return (

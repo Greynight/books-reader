@@ -56,7 +56,6 @@ export default (state = initState, action) => {
       return {...state, isLoading: false};
 
     case LOAD_BOOKS:
-      action.payload = action.payload || [];// TODO tmp
       return {...state, books: action.payload, isLoading: false};
 
     case UPLOAD_BOOK:
@@ -66,7 +65,11 @@ export default (state = initState, action) => {
       return {...state, books, isLoading: false};
 
     case DELETE_BOOK:
-      return {...state, books: action.payload, isLoading: false};
+      const oldBooks = [...state.books];
+      const id = action.payload.id;
+      const newBooks = oldBooks.filter(book => book._id !== id);
+
+      return {...state, books: newBooks, isLoading: false};
 
     case SHOW_UPLOAD_DIALOG:
       return {...state, isUploadDialogShown: true};

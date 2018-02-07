@@ -4,6 +4,7 @@ import { withStyles } from 'material-ui/styles';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
+import Delete from 'material-ui-icons/Delete';
 
 const styles = theme => ({
   root: {
@@ -14,12 +15,24 @@ const styles = theme => ({
   table: {
     minWidth: 700,
   },
+  icon: {
+    cursor: 'pointer'
+  }
 });
 
 
 const Books = (props) => {
+console.log(props.books);
+  // if (props.user && !props.books.length) {
+  //   props.loadBooks();
+  // }
+
   const { classes } = props;
   const books = props.books || [];
+
+  const handleDeleteClick = (evt) => {
+    props.handleDeleteBook(evt.currentTarget.id);
+  };
 
   return (
     <Paper className={classes.root}>
@@ -35,14 +48,24 @@ const Books = (props) => {
             <TableRow>
               <TableCell>Title</TableCell>
               <TableCell>Author</TableCell>
+              <TableCell>File name</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {books.map(book => {
               return (
-                <TableRow key={book.id}>
+                <TableRow key={book._id}>
                   <TableCell>{book.title}</TableCell>
                   <TableCell>{book.author}</TableCell>
+                  <TableCell>{book.fileName}</TableCell>
+                  <TableCell>
+                    <Delete
+                      className={classes.icon}
+                      onClick={handleDeleteClick}
+                      id={book._id}
+                    />
+                  </TableCell>
                 </TableRow>
               );
             })}

@@ -1,8 +1,30 @@
 const mongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectID;
 
 class Books {
-  static getBooks() {
+  static async getBooks(req, res) {
+    try {
+      const client = await mongoClient.connect(process.env.DB_URL);
+      const db = client.db('books');
+      const result = await db.collection('books').find({}, {
+        projection: {
+          _id: 1,
+          title: 1,
+          author: 1,
+          fileName: 1
+        }
+      }).toArray();
 
+      res.status(200).json(result);
+
+      // TODO
+    } catch (err) {
+      console.log(err);
+
+      res.status(500).json({
+        error: err
+      });
+    }
   }
 
   static async insertBook(req, res) {
@@ -53,8 +75,37 @@ class Books {
     }
   }
 
-  static deleteBook() {
+  static async deleteBook(req, res) {
+    const id = req.params.id;
 
+    try {
+      const client = await mongoClient.connect(process.env.DB_URL);
+      const db = client.db('books');
+
+      // TODO check and log correct deletion
+      await db.collection('books').deleteOne({_id: new ObjectID(id)});
+
+      res.status(200).json({id});
+    } catch (err) {
+      console.log(err);
+
+      // TODO
+      res.status(500).json({
+        error: err
+      });
+    }
+
+
+
+
+      console.log(req.params);
+      // TODO delete book from the db
+      // TODO what should be done with all statistics?
+
+      return id;
+      res.json({
+        result: 'deleted'
+      });
   }
 }
 

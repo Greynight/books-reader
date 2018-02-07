@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import store from '../redux/store';
 
 import {
-  signInAction,
-  signUpAction,
+  //loadBooksAction,
   getCurrentUserAction,
   showSignInDialogAction,
   showSignUpDialogAction,

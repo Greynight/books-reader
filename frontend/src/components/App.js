@@ -14,18 +14,6 @@ import Loader from './Loader';
 
 import BooksContainer from './BooksContainer';
 
-
-import Button from 'material-ui/Button';
-import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-import Visibility from 'material-ui-icons/Visibility';
-import FileUpload from 'material-ui-icons/FileUpload';
-import VisibilityOff from 'material-ui-icons/VisibilityOff';
-import { FormControl } from 'material-ui/Form';
-import IconButton from 'material-ui/IconButton';
-
-
-
-
 import PropTypes from 'prop-types';
 import {withStyles} from "material-ui/styles/index";
 

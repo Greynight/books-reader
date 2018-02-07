@@ -6,8 +6,6 @@ const config = {
 
 class Book {
   static async upload(data) {
-    console.log(data);
-
     const { title, author, file } = data;
 
     let form = new FormData();
@@ -27,11 +25,14 @@ class Book {
   }
 
   static async getList() {
-
+    // TODO cache
+    const result = await axios.get(process.env.REACT_APP_GET_BOOKS, config);
+    return result.data;
   }
 
-  static async delete() {
-
+  static async delete(id) {
+    const result = await axios.delete(`${process.env.REACT_APP_GET_BOOKS}/${id}`, config);
+    return result.data;
   }
 }
 

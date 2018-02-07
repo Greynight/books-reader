@@ -1,5 +1,5 @@
 const mongoClient = require('mongodb').MongoClient;
-const ObjectID  = require('mongodb').ObjectID ;
+const ObjectID = require('mongodb').ObjectID;
 
 /**
  * Serialize user to store in session
