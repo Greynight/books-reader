@@ -13,7 +13,8 @@ import {
   DELETE_BOOK,
   SHOW_UPLOAD_DIALOG,
   HIDE_UPLOAD_DIALOG,
-  OPEN_BOOK
+  OPEN_BOOK,
+  LOAD_BOOK
 } from './types';
 
 const initState = {
@@ -23,7 +24,8 @@ const initState = {
   isUploadDialogShown: false,
   isLoading: false,
   books: [],
-  activeBook: null
+  activeBook: null,
+  bookContent: []
 };
 
 export default (state = initState, action) => {
@@ -80,6 +82,9 @@ export default (state = initState, action) => {
 
     case OPEN_BOOK:
       return {...state, activeBook: action.payload};
+
+    case LOAD_BOOK:
+      return {...state, bookContent: action.payload};
 
     default:
       return state;

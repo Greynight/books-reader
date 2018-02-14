@@ -12,7 +12,6 @@ import {
   openBookAction
   //hideUploadDialogAction
 } from './../redux/actions';
-import {getCurrentUserAction} from "../redux/actions";
 
 const mapStateToProps = (state) => ({
   activeBook: state.activeBook,

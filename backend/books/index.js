@@ -95,17 +95,38 @@ class Books {
       });
     }
 
-
-
-
-      console.log(req.params);
       // TODO delete book from the db
       // TODO what should be done with all statistics?
+  }
 
-      return id;
-      res.json({
-        result: 'deleted'
+  static async loadBook(req, res) {
+    try {
+      const client = await mongoClient.connect(process.env.DB_URL);
+      const db = client.db('books');
+      const result = await db.collection('books').findOne({_id: new ObjectID('5a79aee3b1086d315ce7b753')});
+//console.log(Object.keys(result));
+      let text = '';
+
+      if (result && result.file) {
+        text = result.file.slice(0, 10000);
+        //text = text.replace(new RegExp('\r?\n','g'), '<br class="br" />');
+        //text = '<p>' + text.replace(/\r\n/g, "</p><p>").replace(/\n/g, "</p><p>") + '</p>';
+        const re = /\r\n*/;
+        //var nameList = names.split(re);
+        text = text.split(re);
+        //text = text.map(item => `<p>${item}</p>`);
+      }
+
+      res.status(200).json(text);
+
+      // TODO
+    } catch (err) {
+      console.log(err);
+
+      res.status(500).json({
+        error: err
       });
+    }
   }
 }
 

@@ -13,6 +13,7 @@ import UploadBookDialog from './UploadBookDialogContainer';
 import Loader from './Loader';
 
 import BooksContainer from './BooksContainer';
+import BookContainer from './BookContainer';
 
 import PropTypes from 'prop-types';
 import {withStyles} from "material-ui/styles/index";
@@ -39,7 +40,7 @@ const App = (props) => {
         <SignInDialogContainer />
         <UploadBookDialog />
 
-        <Route path="/" exact component={Main} />
+        <Route path="/" exact component={BookContainer} />
         <Route path="/books" component={BooksContainer}/>
       </div>
     </Router>

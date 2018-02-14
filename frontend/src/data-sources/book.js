@@ -34,6 +34,11 @@ class Book {
     const result = await axios.delete(`${process.env.REACT_APP_GET_BOOKS}/${id}`, config);
     return result.data;
   }
+
+  static async load(params) {
+    const result = await axios.get(process.env.REACT_APP_LOAD_BOOK, config);
+    return result.data;
+  }
 }
 
 export default Book;

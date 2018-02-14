@@ -16,7 +16,7 @@ const mapDispatchToProps = (dispatch) => ({
   handleSignInClick: (data) => {
     dispatch(showLoaderAction());
     dispatch(signInAction(data)).then(() => {
-      dispatch(showLoaderAction())
+      dispatch(showLoaderAction());
       dispatch(loadBooksAction());
     });
     dispatch(hideSignInDialogAction());

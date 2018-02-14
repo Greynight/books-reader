@@ -81,6 +81,8 @@ app.delete('/books/:id', isLoggedIn, Books.deleteBook);
 
 app.post('/upload', isLoggedIn, upload.any(), Books.insertBook);
 
+app.get('/load', isLoggedIn, Books.loadBook);
+
 // TODO tmp
 
 
