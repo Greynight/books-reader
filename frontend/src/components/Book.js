@@ -1,12 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { withStyles } from 'material-ui/styles';
-import Paper from 'material-ui/Paper';
+import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import RootRef from '@material-ui/core/RootRef';
 
-import Word from './Word';
+import prepareBook from './../utils/prepareBook';
+
+import { connect } from 'react-redux';
+
+import {
+  loadBookAction,
+  updateOffsetAction
+} from './../redux/actions';
+import store from "../redux/store";
+
+// import Word from './Word';
+
+// TODO on change book
 
 const styles = theme => ({
+  container: {
+    height: '100%',
+    width: '100%'
+  },
   root: {
     //width: '80%',
     //height: '100%',
@@ -17,130 +36,163 @@ const styles = theme => ({
     bottom: '50px',
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
+    paddingLeft: '10px',
+    paddingRight: '10px'
     // borderStyle: 'solid',
     // borderWidth: '1px',
     // borderColor: '1px'
   },
   invisibleText: {
     visibility: 'hidden'
+  },
+  keyboardArrowLeft: {
+    width: '96px',
+    height: '96px',
+    position: 'absolute',
+    top: '50%',
+    left: '0px',
+    cursor: 'pointer'
+  },
+  keyboardArrowRight: {
+    width: '96px',
+    height: '96px',
+    position: 'absolute',
+    top: '50%',
+    right: '0px',
+    cursor: 'pointer'
   }
   // text: {
   //   whiteSpace: 'pre-wrap'
   // }
 });
 
-class Book extends React.Component{
-  constructor() {
-    super();
+class Book extends React.Component {
+  constructor(props) {
+    super(props);
+
+    // this.bookContent = ''/*prepareBook(props)*/;
+    // this.offsetDirection = ''/*props.offsetDirection*/;
+
+    this.isBookLoading = false;
 
     this.state = {
-      bookContentLength: 0
+      bookContent: '',
+      classes: props.classes
     };
+
+    this.bookContainer = React.createRef();
+    this.bookPage = React.createRef();
   }
+
+  // componentWillMount() {
+  //   console.log('componentWillMount');
+  // }
 
   componentDidMount() {
-    const div = document.getElementById('book-container');
-    const innerDiv = document.getElementById('inner-span');
-    const bookContent = this.props.bookContent;
+    console.log('componentDidMount');
 
-    const textArray = bookContent
-      .filter(item => !!item)
-      .map((item) => (
-        '<p>' + item + '</p>'
-      ));
+    const { activeBook, bookOffset } = this.props;
 
-    let string = '';
-    const paragraphsCount = textArray.length;
+    if (!!activeBook) {
+      this.isBookLoading = true;
 
-    for (let i = 0; i < paragraphsCount; i++) {
-      string += textArray[i];
-      innerDiv.innerHTML = string;
-
-      if (div.clientHeight < div.scrollHeight) {
-        innerDiv.innerHTML = '';
-        this.setState({bookContentLength: i});
-        break;
-      }
+      store.dispatch(loadBookAction({
+        forward: true,
+        id: activeBook,
+        bookOffset
+      }));
     }
 
-    if (!this.props.bookContent.length && this.props.user) {
-      this.props.loadBook();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log('componentDidUpdate');
+
+    const { activeBook, bookContent, offsetDirection, bookOffset, updateOffset } = this.props;
+
+    if (activeBook && !bookContent && !this.isBookLoading) {
+      store.dispatch(loadBookAction({
+        forward: true,
+        id: activeBook,
+        bookOffset
+      }));
+    }
+
+    if (activeBook && bookContent && !this.state.bookContent) {
+      this.isBookLoading = false;
+
+      this.setState({
+        bookContent: prepareBook({
+          activeBook,
+          bookContent,
+          offsetDirection,
+          bookOffset,
+          updateOffset,
+          bookContainer: this.bookContainer.current,
+          bookPage: this.bookPage.current
+        })
+      });
     }
   }
 
+  // TODO ability to start from the beginning
+  moveBackward = () => {
+    const { activeBook, loadBook, bookOffset } = this.props;
+
+    loadBook({
+      forward: true,
+      id: activeBook,
+      bookOffset
+    });
+  };
+
+  moveForward = () => {
+    const { activeBook, loadBook, bookOffset } = this.props;
+
+    loadBook({
+      forward: false,
+      id: activeBook,
+      bookOffset
+    });
+  };
+
   render() {
-    const content = this.props.bookContent || [];
-    const notChars = [' ', '-', '=', '+', '*', '&', '?', '%', ';', ':', '$', '#', '@', '!', ',', '.', '/', '\\',
-      '—', '"', '(', ')', '{', '}', '«', '»', '…', '[', ']'];
-
-    const text = content
-      .filter(item => !!item)
-      .slice(0, this.state.bookContentLength)
-      .map((item, index) => {
-        let textArray = [];
-        let textItem = '';
-        let i = 0;
-        let wasWord = false;
-
-        for (let char of item) {
-          let isNotWord = notChars.includes(char);
-
-          // if empty textItem
-          if (!textItem) {
-            textItem = char;
-
-            // if not empty textItem
-          } else {
-            // if word
-            if (wasWord) {
-              // if word continues
-              if (!isNotWord) {
-                textItem += char;
-                // if word finished
-              } else {
-                textArray.push(<Word key={`w-${index}-${i}`} text={textItem} />);
-                textItem = char;
-              }
-              // if not word
-            } else {
-              // if not word continues
-              if (isNotWord) {
-                textItem += char;
-                // if not word finished
-              } else {
-                textArray.push(<span key={`s-${index}-${i}`}>{textItem}</span>);
-                textItem = char;
-              }
-            }
-          }
-
-          wasWord = !isNotWord;
-          i++;
-        }
-
-        if (wasWord) {
-          textArray.push(<Word key={`w-${index}-${i}`} text={textItem} />);
-        } else {
-          textArray.push(<span key={`s-${index}-${i}`}>{textItem}</span>);
-        }
-
-        return <p key={`p-${index}`}>{textArray}</p>;
-      }
-    );
+    const classes = this.state.classes;
 
     return (
-      <Paper className={this.props.classes.root} id="book-container">
-        <div className={this.props.classes.text}>{text}</div>
-        <div id='inner-span' className={this.props.classes.invisibleText}>hidden text</div>
-      </Paper>
+      !!this.props.bookContent ?
+        <div className={classes.container}>
+          <KeyboardArrowLeft className={classes.keyboardArrowLeft} onClick={this.moveForward}/>
+          <KeyboardArrowRight className={classes.keyboardArrowRight} onClick={this.moveBackward}/>
+          <RootRef rootRef={this.bookContainer}>
+            <Paper className={classes.root}>
+              <div className={classes.text}>{this.state.bookContent}</div>
+              <div className={classes.invisibleText} ref={this.bookPage}>hidden text</div>
+            </Paper>
+          </RootRef>
+        </div> : <h1>Please select a book</h1>
     );
   }
 }
 
-Book.propTypes = {
-  classes: PropTypes.object.isRequired,
-  bookContent: PropTypes.array.isRequired,
-  //activeBook: PropTypes.object.isRequired
-};
+const mapStateToProps = (state) => ({
+  activeBook: state.activeBook,
+  bookContent: state.bookContent,
+  user: state.user,
+  offsetDirection: state.offsetDirection,
+  bookOffset: state.bookOffset
+});
 
-export default withStyles(styles)(Book);
+const mapDispatchToProps = (dispatch) => ({
+  loadBook: (params) => {
+    dispatch(loadBookAction(params));
+  },
+  updateOffset: (offset) => {
+    dispatch(updateOffsetAction(offset));
+  }
+});
+
+const StyledBook = withStyles(styles)(Book);
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(StyledBook);

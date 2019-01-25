@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 let styles = {
   word: {
@@ -9,8 +9,8 @@ let styles = {
   }
 };
 
-const handleWordClick = () => {
-
+const handleWordClick = (word) => {
+  console.log(word);
 };
 
 const Word = (props) => {

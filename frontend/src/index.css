@@ -7,3 +7,7 @@ body {
 #book-container p {
   text-indent: 10px;
 }
+
+.paragraph {
+  text-indent: 25px;
+}

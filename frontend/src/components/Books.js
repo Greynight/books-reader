@@ -1,12 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import Paper from 'material-ui/Paper';
-import Button from 'material-ui/Button';
-import Delete from 'material-ui-icons/Delete';
-import OpenInBrowser from 'material-ui-icons/OpenInBrowser';
-import Close from 'material-ui-icons/Close';
+import { withStyles } from '@material-ui/core/styles';
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
+
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import Delete from '@material-ui/icons/Delete';
+import OpenInBrowser from '@material-ui/icons/Unarchive';
+import Close from '@material-ui/icons/Close';
+import {Link} from "react-router-dom";
+
+import { connect } from 'react-redux';
+
+import {
+  loadBooksAction,
+  //uploadBookAction,
+  deleteBookAction,
+  showUploadDialogAction,
+  showLoaderAction,
+  openBookAction
+  //hideUploadDialogAction
+} from './../redux/actions';
 
 const styles = theme => ({
   root: {
@@ -50,7 +70,7 @@ const Books = (props) => {
   return (
     <Paper className={classes.root}>
       <Button
-        variant="raised"
+        variant="contained"
         component="label"
         color="primary"
         onClick={props.handleShowDialogClick}
@@ -72,24 +92,33 @@ const Books = (props) => {
                   key={book._id}
                   className={props.activeBook === book._id ? classes.activeRow : ''}
                 >
-                  <TableCell className={classes.rowCell}>{book.title}</TableCell>
+                  <TableCell className={classes.rowCell}>
+                    {props.activeBook === book._id ? <Link to="/book">{book.title}</Link> : book.title}
+                  </TableCell>
                   <TableCell className={classes.rowCell}>{book.author}</TableCell>
                   <TableCell className={classes.rowCell}>{book.fileName}</TableCell>
                   <TableCell id={book._id}>
                     {props.activeBook === book._id ?
-                      <Close
-                        onClick={() => handleOpenBook(null)}
-                        className={classes.icon}
-                      /> :
-                      <OpenInBrowser
-                        onClick={() => handleOpenBook(book._id)}
-                        className={classes.icon}
-                      />
+                      <Tooltip title="Set inactive">
+                        <Close
+                          onClick={() => handleOpenBook(null)}
+                          className={classes.icon}
+                        />
+                      </Tooltip>
+                    :
+                      <Tooltip title="Set active">
+                        <OpenInBrowser
+                          onClick={() => handleOpenBook(book._id)}
+                          className={classes.icon}
+                        />
+                      </Tooltip>
                     }
-                    <Delete
-                      className={classes.icon}
-                      onClick={() => handleDeleteClick(book._id)}
-                    />
+                    <Tooltip title="Remove">
+                      <Delete
+                        className={classes.icon}
+                        onClick={() => handleDeleteClick(book._id)}
+                      />
+                    </Tooltip>
                   </TableCell>
                 </TableRow>
               );
@@ -104,10 +133,35 @@ const Books = (props) => {
   );
 };
 
-Books.propTypes = {
-  classes: PropTypes.object.isRequired,
-  //books: PropTypes.array.isRequired,
-  //activeBook: PropTypes.object.isRequired
-};
+const mapStateToProps = (state) => ({
+  activeBook: state.activeBook,
+  books: state.books,
+  user: state.user,
+  isUploadDialogShown: state.isUploadDialogShown
+});
 
-export default withStyles(styles)(Books);
+const mapDispatchToProps = (dispatch) => ({
+  // handleUpload: (data) => {
+  //   dispatch(uploadBookAction(data));
+  // },
+  handleShowDialogClick: () => {
+    dispatch(showUploadDialogAction());
+  },
+  // loadBooks: () => {
+  //   dispatch(loadBooksAction());
+  // },
+  handleDeleteBook: (id) => {
+    dispatch(showLoaderAction());
+    dispatch(deleteBookAction(id));
+  },
+  handleChangeActiveBook: (id) => {
+    dispatch(openBookAction(id));
+  }
+  // handleHideDialogClick: () => {
+  //   dispatch(hideUploadDialogAction());
+  // }
+});
+
+const StyledBooks = withStyles(styles)(Books);
+
+export default connect(mapStateToProps, mapDispatchToProps)(StyledBooks);

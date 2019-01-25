@@ -1,33 +1,27 @@
 import React from 'react';
 
-import TopBarContainer from './TopBarContainer';
-import SignUpDialogContainer from './SignUpDialogContainer';
-import SignInDialogContainer from './SignInDialogContainer';
-import Loader from './Loader';
-
-
-
-import TextField from 'material-ui/TextField';
-import Button from 'material-ui/Button';
-import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-import Visibility from 'material-ui-icons/Visibility';
-import FileUpload from 'material-ui-icons/FileUpload';
-import VisibilityOff from 'material-ui-icons/VisibilityOff';
-import { FormControl } from 'material-ui/Form';
-import IconButton from 'material-ui/IconButton';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+// import Input from '@material-ui/core/Input';
+// import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+// import Visibility from 'material-ui-icons/Visibility';
+import FileUpload from '@material-ui/icons/CloudUpload';
+// import VisibilityOff from 'material-ui-icons/VisibilityOff';
+import FormControl from '@material-ui/core/FormControl';
+// import IconButton from '@material-ui/core/IconButton';
 
 
 
 
 import PropTypes from 'prop-types';
-import {withStyles} from "material-ui/styles/index";
+import { withStyles } from '@material-ui/core/styles';
 
 
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-} from 'material-ui/Dialog';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 const styles = theme => ({
   root: {
@@ -102,7 +96,7 @@ class SignInDialog extends React.Component {
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="book">Select a book</InputLabel>
             <Button
-              variant="raised"
+              variant="contained"
               component="label"
               color="primary"
             >
@@ -120,7 +114,7 @@ class SignInDialog extends React.Component {
           <Button onClick={this.props.handleDialogClose} color="primary">
             Close
           </Button>
-          <Button onClick={this.handleUploadClick} variant="raised" color="primary">
+          <Button onClick={this.handleUploadClick} variant="contained" color="primary">
             Upload
           </Button>
         </DialogActions>

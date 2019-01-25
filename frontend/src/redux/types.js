@@ -14,3 +14,4 @@ export const SHOW_UPLOAD_DIALOG = 'SHOW_UPLOAD_DIALOG';
 export const HIDE_UPLOAD_DIALOG = 'HIDE_UPLOAD_DIALOG';
 export const OPEN_BOOK = 'OPEN_BOOK';
 export const LOAD_BOOK = 'LOAD_BOOK';
+export const UPDATE_OFFSET = 'UPDATE_OFFSET';

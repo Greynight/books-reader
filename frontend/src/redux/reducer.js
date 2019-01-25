@@ -14,7 +14,8 @@ import {
   SHOW_UPLOAD_DIALOG,
   HIDE_UPLOAD_DIALOG,
   OPEN_BOOK,
-  LOAD_BOOK
+  LOAD_BOOK,
+  UPDATE_OFFSET
 } from './types';
 
 const initState = {
@@ -24,8 +25,10 @@ const initState = {
   isUploadDialogShown: false,
   isLoading: false,
   books: [],
-  activeBook: null,
-  bookContent: []
+  activeBook: localStorage.activeBook || null,
+  bookContent: '',
+  bookOffset: 0,
+  offsetDirection: true
 };
 
 export default (state = initState, action) => {
@@ -63,7 +66,7 @@ export default (state = initState, action) => {
 
     case UPLOAD_BOOK:
       let books = [...state.books];
-      books.push(action.payload.book);
+      books.push(action.payload.data.book);
 
       return {...state, books, isLoading: false};
 
@@ -81,10 +84,22 @@ export default (state = initState, action) => {
       return {...state, isUploadDialogShown: false};
 
     case OPEN_BOOK:
+      localStorage.activeBook = action.payload;
+
       return {...state, activeBook: action.payload};
 
     case LOAD_BOOK:
-      return {...state, bookContent: action.payload};
+      let payload = action.payload || {};
+
+      return {
+        ...state,
+        bookContent: payload.text || '',
+        offsetDirection: payload.direction,
+        bookOffset: payload.current
+      };
+
+    case UPDATE_OFFSET:
+      return {...state, bookOffset: action.payload};
 
     default:
       return state;

@@ -1,20 +1,21 @@
 import React from 'react';
-import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
-import Input, { InputLabel, InputAdornment } from 'material-ui/Input';
-import Visibility from 'material-ui-icons/Visibility';
-import VisibilityOff from 'material-ui-icons/VisibilityOff';
-import { FormControl } from 'material-ui/Form';
-import IconButton from 'material-ui/IconButton';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import FormControl from '@material-ui/core/FormControl';
+import IconButton from '@material-ui/core/IconButton';
 
 import PropTypes from 'prop-types';
-import {withStyles} from "material-ui/styles/index";
+import { withStyles } from '@material-ui/core/styles';
 
-import Dialog, {
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-} from 'material-ui/Dialog';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 const styles = theme => ({
   root: {
@@ -103,7 +104,7 @@ class SignInDialog extends React.Component {
           <Button onClick={this.props.handleSignInDialogClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.handleLoginButtonClick} variant="raised" color="primary">
+          <Button onClick={this.handleLoginButtonClick} variant="contained" color="primary">
             Sign In
           </Button>
         </DialogActions>

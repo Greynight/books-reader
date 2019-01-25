@@ -14,7 +14,8 @@ import {
   SHOW_UPLOAD_DIALOG,
   HIDE_UPLOAD_DIALOG,
   OPEN_BOOK,
-  LOAD_BOOK
+  LOAD_BOOK,
+  UPDATE_OFFSET
 } from './types';
 
 import User from './../data-sources/user';
@@ -90,4 +91,10 @@ export const openBookAction = (id) => ({
 export const loadBookAction = (params) => ({
   type: LOAD_BOOK,
   payload: Book.load(params)
+});
+
+// TODO
+export const updateOffsetAction = (offset) => ({
+  type: UPDATE_OFFSET,
+  payload: /*Book.updateOffset(params)*/offset
 });

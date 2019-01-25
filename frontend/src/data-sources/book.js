@@ -36,6 +36,7 @@ class Book {
   }
 
   static async load(params) {
+    config.params = {...params};
     const result = await axios.get(process.env.REACT_APP_LOAD_BOOK, config);
     return result.data;
   }

@@ -9,7 +9,7 @@ axios.interceptors.response.use((response) => {
   // TODO
   return response;
 }, (error) => {
-  const status = error.response.status;
+  const status = error.response && error.response.status;
 
   switch (status) {
     case 401:

@@ -2,9 +2,11 @@ import React from 'react';
 
 import {
   BrowserRouter as Router,
-  Route,
-  Link
+  Route
 } from 'react-router-dom';
+
+import { connect } from 'react-redux';
+import store from '../redux/store';
 
 import TopBarContainer from './TopBarContainer';
 import SignUpDialogContainer from './SignUpDialogContainer';
@@ -12,11 +14,14 @@ import SignInDialogContainer from './SignInDialogContainer';
 import UploadBookDialog from './UploadBookDialogContainer';
 import Loader from './Loader';
 
-import BooksContainer from './BooksContainer';
-import BookContainer from './BookContainer';
+import Books from './Books';
+import Book from './Book';
 
-import PropTypes from 'prop-types';
-import {withStyles} from "material-ui/styles/index";
+import { withStyles } from '@material-ui/core/styles';
+
+import {
+  getCurrentUserAction, showLoaderAction, loadBooksAction
+} from './../redux/actions';
 
 const styles = {
   root: {
@@ -24,32 +29,49 @@ const styles = {
   }
 };
 
-const Main = (props) => {
-  return <span>Main text from the DB</span>
-};
+class App extends React.Component {
+  componentDidMount() {
+    store.dispatch(getCurrentUserAction()).then(({payload: isUnAuthenticated}) => {
+      if (!isUnAuthenticated) {
+        store.dispatch(showLoaderAction());
+        store.dispatch(loadBooksAction());
+      }
+    });
+  }
 
-const App = (props) => {
-  const { classes } = props;
+  render() {
+    const { classes, isLoading, user } = this.props;
 
-  return (
-    <Router>
-      <div className={classes.root}>
-        {props.isLoading ? <Loader/> : ''}
-        <TopBarContainer />
-        <SignUpDialogContainer />
-        <SignInDialogContainer />
-        <UploadBookDialog />
+    return (
+      <Router>
+        <div className={classes.root}>
+          {isLoading ? <Loader/> : null}
+          <TopBarContainer />
+          <SignUpDialogContainer />
+          <SignInDialogContainer />
+          <UploadBookDialog />
 
-        <Route path="/" exact component={BookContainer} />
-        <Route path="/books" component={BooksContainer}/>
-      </div>
-    </Router>
-  );
-};
+          {user ?
+            <React.Fragment>
+              <Route path="/" exact component={Books} />
+              <Route path="/books" component={Books}/>
+              <Route path="/book" component={Book}/>
+            </React.Fragment> : <h1>Sign In or Sign Up please.</h1>
+          }
 
-App.propTypes = {
-  classes: PropTypes.object.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-};
+        </div>
+      </Router>
+    );
+  }
 
-export default withStyles(styles)(App);
+}
+
+const mapStateToProps = (state) => ({
+  user: state.user,
+  isLoading: state.isLoading
+});
+
+const StyledApp = withStyles(styles)(App);
+
+export default connect(mapStateToProps, null)(StyledApp);
+

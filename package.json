@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./backend/index.js"
+    "start": "cross-env NODE_ENV=development ./node_modules/.bin/nodemon ./backend/index.js"
   },
   "private": true,
   "author": "Ivan Sydorenko",
@@ -25,5 +25,9 @@
     "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
     "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "cross-env": "^5.1.0",
+    "nodemon": "^1.12.1"
   }
 }
